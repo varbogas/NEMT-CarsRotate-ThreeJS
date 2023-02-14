@@ -1,7 +1,7 @@
 // import './style.css'
 import * as dat from 'lil-gui'
 import * as THREE from 'three'
-// import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js' //***
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
 // import { CubeCamera, MixOperation } from 'three'
@@ -125,7 +125,7 @@ gltfLoader.load ('MTM-fleet3-FULL-WHITE-BAKING-joined-materials.glb',
         const vanMini1 = mixer.clipAction(gltf.animations[8])
         const vanMini2 = mixer.clipAction(gltf.animations[9])
         const vanMini3 = mixer.clipAction(gltf.animations[10])
-        const CameraAction = mixer.clipAction(gltf.animations[11])   // this this the camera animation clip from Blender
+        const CameraAction = mixer.clipAction(gltf.animations[11])   // this is the camera animation clip from Blender
 
         iphone.play()
         cabYellow.play()
@@ -174,14 +174,27 @@ window.addEventListener('resize', () =>
 // Base camera
 const camera = new THREE.PerspectiveCamera(26, sizes.width / sizes.height, 0.1,  100)
 camera.position.set(5,2,5)
-camera.lookAt(0,0,0)
+camera.lookAt(0,0,0) 
 scene.add(camera)
 
 // Controls
 
 // ORBIT CONTROLS!
-// controls = new OrbitControls(camera, canvas)
-// controls.enableDamping = true
+controls = new OrbitControls(camera, canvas) //*** 
+
+//soften movements
+controls.enableDamping = true
+
+//pan angles on y axis
+controls.minPolarAngle = Math.PI / 2.5;
+controls.maxPolarAngle = Math.PI / 4;
+
+//auto rotation speed and direction
+controls.autoRotate = true;
+controls.autoRotateSpeed *= -3;
+
+//disables zoom in and out
+controls.enableZoom = false;
 
 // controls.target.set(3,0.1,0.6);  // when using orbit controls, this CONTROSLS THE POSITION OF THE CAMERA is is the position of the camera when the page loads
 // controls.update();
@@ -196,6 +209,7 @@ scene.add(camera)
 // controls.maxPolarAngle = Math.PI / 2.45
 // controls.minPolarAngle = Math.PI / 2.55
 
+controls.maxDistance = 10
 // controls.maxDistance = 3
 // controls.minDistance = 1
 
@@ -244,7 +258,7 @@ const tick = () =>
     const deltaTime = elapsedTime - previousTime
     previousTime = elapsedTime
     
-    // controls.update()   // this is for orbit controls
+    controls.update()  //*** */ // this is for orbit controls
 
     if (mixer !== null){
         mixer.update(deltaTime)
