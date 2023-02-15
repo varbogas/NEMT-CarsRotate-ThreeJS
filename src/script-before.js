@@ -1,8 +1,10 @@
 import './style.css'
+// import * as dat from 'lil-gui'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js' //***
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
+// import { CubeCamera, MixOperation } from 'three'
 
 /**
  * Base
@@ -17,6 +19,11 @@ const canvas = document.querySelector('canvas.webgl')
 
 // Scene
 const scene = new THREE.Scene()
+
+// const mouse = new THREE.Vector2();
+// const target = new THREE.Vector2();
+// const windowHalf = new THREE.Vector2( window.innerWidth / 2, window.innerHeight / 2 );
+
 
 /**
  * Update all materials
@@ -52,7 +59,7 @@ testPlane.position.y = 0.017
 /**
  * Lights
  */
-const directionalLight = new THREE.DirectionalLight('#ffffff', 4.5)
+const directionalLight = new THREE.DirectionalLight('#ffffff', 4.05)
 directionalLight.castShadow = true
 
 directionalLight.position.set(-1.564, 2.419, 2.296)
@@ -124,29 +131,8 @@ gltfLoader.load ('MTM-fleet3-FULL-WHITE-BAKING-joined-materials.glb',
         vanMini3.play()
             
         CameraAction.play() // this is the camera animation clip from Blender 
-
     }
 )
-
-
-// MOUSE TRACKING CAMERA 
-
-const mouse = new THREE.Vector2();
-const windowHalf = new THREE.Vector2( window.innerWidth / 2, window.innerHeight / 2 );
-
-
-function onMouseMove( event ) {
-
-	mouse.x = ( event.clientX - windowHalf.x );
-	mouse.y = ( event.clientY - windowHalf.x );
-  console.log (mouse)
-
-}
-
-document.addEventListener( 'mousemove', onMouseMove, false );
-
-
-
 
 /**
  * Sizes
@@ -182,14 +168,11 @@ camera.position.set(5,2,5)
 camera.lookAt(0,0,0) 
 scene.add(camera)
 
-
-
-
 // Controls
 
-// // ORBIT CONTROLS!
-// controls = new OrbitControls(camera, canvas) //*** 
-// controls.maxDistance = 10
+// ORBIT CONTROLS!
+controls = new OrbitControls(camera, canvas) //*** 
+controls.maxDistance = 10
 
 
 /**
@@ -209,6 +192,31 @@ renderer.shadowMap.type = THREE.PCFSoftShadowMap
 renderer.toneMapping = THREE.LinearToneMapping
 renderer.toneMappingExposure = 1.302
 
+
+//////************* */
+
+// function onMouseMove( event ) {
+
+// 	mouse.x = ( event.clientX - windowHalf.x );
+// 	mouse.y = ( event.clientY - windowHalf.x );
+
+// }
+
+// function animate() {
+
+//   target.x = ( 1 - mouse.x ) * 0.0002;
+//   target.y = ( 1 - mouse.y ) * 0.0002;
+  
+//   camera.rotation.x += 0.05 * ( target.y - camera.rotation.x );
+//   camera.rotation.y += 0.05 * ( target.x - camera.rotation.y );
+
+//   requestAnimationFrame( animate );
+//   renderer.render( scene, camera );
+
+// }
+
+///////******************* */
+
 /**
  * Animate
  */
@@ -220,13 +228,8 @@ const tick = () =>
     const elapsedTime = clock.getElapsedTime()
     const deltaTime = elapsedTime - previousTime
     previousTime = elapsedTime
-
-    camera.position.x = (mouse.x *-0.001) + 5
-    camera.position.y = (mouse.y *.001) + 2
-    // camera.position.z = (mouse.z *.001) + 5
-    camera.lookAt(0,0,0) 
     
-    // controls.update()  // this is for orbit controls
+    controls.update()  // this is for orbit controls
 
     if (mixer !== null){
         mixer.update(deltaTime)
